@@ -106,6 +106,45 @@ module KFX86_Accumulator (
                 out_flags.s = select_word ? out_tmp[15] : out_tmp[7];
                 out = source_1;
             end
+            `ALU_OP_ROL: begin
+                {out_flags.c, out_tmp} = {source_1, source_1[15]};
+                out_flags.o = out_flags.c ^ out_tmp[15];
+                out = out_tmp;
+            end
+            `ALU_OP_ROR: begin
+                {out_tmp, out_flags.c} = {source_1[0], source_1};
+                out_flags.o = ^out_tmp[15:14];
+                out = out_tmp;
+            end
+            `ALU_OP_RCL: begin
+                {out_flags.c, out_tmp} = {source_1, out_flags.c};
+                out_flags.o = out_flags.c ^ out_tmp[15];
+                out = out_tmp;
+            end
+            `ALU_OP_RCR: begin
+                {out_tmp, out_flags.c} = {out_flags.c, source_1};
+                out_flags.o = ^out_tmp[15:14];
+                out = out_tmp;
+            end
+            `ALU_OP_SHL: begin
+                {out_flags.c, out_tmp} = {source_1, 1'b0};
+                out_flags.o = out_flags.c ^ out_tmp[15];
+                out = out_tmp;
+            end
+            `ALU_OP_SHR: begin
+                {out_tmp, out_flags.c} = {1'b0, source_1};
+                out_flags.o = source_1[15];
+                out = out_tmp;
+            end
+            `ALU_OP_SAR: begin
+                {out_tmp, out_flags.c} = {source_1[15], source_1};
+                out_flags.o = 1'b0;
+                //out_flags.a = 1'bx;
+                out_flags.p = ~^out_tmp[7:0];
+                out_flags.z = ~|out_tmp;
+                out_flags.s = select_word ? out_tmp[15] : out_tmp[7];
+                out = out_tmp;
+            end
             default: begin
                 out_tmp     = 16'h0000;
                 out_flags   = source_flags;

@@ -33,4 +33,12 @@ typedef struct packed {
 `define ALU_OP_XOR  (5'b00110)
 `define ALU_OP_CMP  (5'b00111)
 
+`define ALU_OP_ROL  (5'b01000)
+`define ALU_OP_ROR  (5'b01001)
+`define ALU_OP_RCL  (5'b01010)
+`define ALU_OP_RCR  (5'b01011)
+`define ALU_OP_SHL  (5'b01100)
+`define ALU_OP_SHR  (5'b01101)
+`define ALU_OP_SAR  (5'b01111)
+
 `endif
