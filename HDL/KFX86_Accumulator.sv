@@ -30,7 +30,7 @@ module KFX86_Accumulator (
                 out = out_tmp;
             end
             `ALU_OP_OR: begin
-                out_tmp = (source_1 | source_2) & (select_word ? 8'hFFFF : 8'h00FF);
+                out_tmp = (source_1 | source_2) & (select_word ? 16'hFFFF : 16'h00FF);
                 out_flags.c = 1'b0;
                 out_flags.o = 1'b0;
                 //out_flags.a = 1'bx;
@@ -53,7 +53,7 @@ module KFX86_Accumulator (
                 out = out_tmp;
             end
             `ALU_OP_AND: begin
-                out_tmp = (source_1 & source_2) & (select_word ? 8'hFFFF : 8'h00FF);
+                out_tmp = (source_1 & source_2) & (select_word ? 16'hFFFF : 16'h00FF);
                 out_flags.c = 1'b0;
                 out_flags.o = 1'b0;
                 //out_flags.a = 1'bx;
@@ -68,7 +68,7 @@ module KFX86_Accumulator (
                 out = out_tmp;
             end
             `ALU_OP_XOR: begin
-                out_tmp = (source_1 ^ source_2) & (select_word ? 8'hFFFF : 8'h00FF);
+                out_tmp = (source_1 ^ source_2) & (select_word ? 16'hFFFF : 16'h00FF);
                 out_flags.c = 1'b0;
                 out_flags.o = 1'b0;
                 //out_flags.a = 1'bx;
