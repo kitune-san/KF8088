@@ -41,4 +41,13 @@ typedef struct packed {
 `define ALU_OP_SHR  (5'b01101)
 `define ALU_OP_SAR  (5'b01111)
 
+`define ALU_OP_INC  (5'b10000)
+`define ALU_OP_DEC  (5'b10001)
+`define ALU_OP_NOT  (5'b10010)
+`define ALU_OP_NEG  (5'b10011)
+`define ALU_OP_DAA  (5'b10100)
+`define ALU_OP_DAS  (5'b10101)
+`define ALU_OP_AAA  (5'b10110)
+`define ALU_OP_AAS  (5'b10111)
+
 `endif

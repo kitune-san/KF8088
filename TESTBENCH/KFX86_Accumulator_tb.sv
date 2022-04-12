@@ -323,6 +323,96 @@ module KFX86_Accumulator_tm();
     endtask;
 
     //
+    // Task : NOT
+    //
+    task TASK_NOT(input [15:0] s1, input [15:0] flags, input sw);
+    begin
+        opcode          = `ALU_OP_NOT;
+        source_1        = s1;
+        source_2        = 0;
+        source_flags    = flags;
+        select_word     = sw;
+        #(`TB_CYCLE * 2);
+        $display("%d(%x) -(NOT)-> %d(%x) o:%d d:%d i:%d t:%d s:%d z:%d a:%d p:%d c:%d", source_1, source_1, out, out, out_flags.o, out_flags.d, out_flags.i, out_flags.t, out_flags.s, out_flags.z, out_flags.a, out_flags.p, out_flags.c);
+    end
+    endtask;
+
+    //
+    // Task : NEG
+    //
+    task TASK_NEG(input [15:0] s1, input [15:0] flags, input sw);
+    begin
+        opcode          = `ALU_OP_NEG;
+        source_1        = s1;
+        source_2        = 0;
+        source_flags    = flags;
+        select_word     = sw;
+        #(`TB_CYCLE * 2);
+        $display("%d(%x) -(NEG)-> %d(%x) o:%d d:%d i:%d t:%d s:%d z:%d a:%d p:%d c:%d", source_1, source_1, out, out, out_flags.o, out_flags.d, out_flags.i, out_flags.t, out_flags.s, out_flags.z, out_flags.a, out_flags.p, out_flags.c);
+    end
+    endtask;
+
+    //
+    // Task : DAA
+    //
+    task TASK_DAA(input [15:0] s1, input [15:0] flags);
+    begin
+        opcode          = `ALU_OP_DAA;
+        source_1        = s1;
+        source_2        = 0;
+        source_flags    = flags;
+        select_word     = 1'b0;
+        #(`TB_CYCLE * 2);
+        $display("%d(%x) a:%d c:%d -(DAA)-> %d(%x) o:%d d:%d i:%d t:%d s:%d z:%d a:%d p:%d c:%d", source_1, source_1, flags[4], flags[0], out, out, out_flags.o, out_flags.d, out_flags.i, out_flags.t, out_flags.s, out_flags.z, out_flags.a, out_flags.p, out_flags.c);
+    end
+    endtask;
+
+    //
+    // Task : DAS
+    //
+    task TASK_DAS(input [15:0] s1, input [15:0] flags);
+    begin
+        opcode          = `ALU_OP_DAS;
+        source_1        = s1;
+        source_2        = 0;
+        source_flags    = flags;
+        select_word     = 1'b0;
+        #(`TB_CYCLE * 2);
+        $display("%d(%x) a:%d c:%d -(DAS)-> %d(%x) o:%d d:%d i:%d t:%d s:%d z:%d a:%d p:%d c:%d", source_1, source_1, flags[4], flags[0], out, out, out_flags.o, out_flags.d, out_flags.i, out_flags.t, out_flags.s, out_flags.z, out_flags.a, out_flags.p, out_flags.c);
+    end
+    endtask;
+
+    //
+    // Task : AAA
+    //
+    task TASK_AAA(input [15:0] s1, input [15:0] flags);
+    begin
+        opcode          = `ALU_OP_AAA;
+        source_1        = s1;
+        source_2        = 0;
+        source_flags    = flags;
+        select_word     = 1'b0;
+        #(`TB_CYCLE * 2);
+        $display("%d(%x) a:%d -(AAA)-> %d(%x) o:%d d:%d i:%d t:%d s:%d z:%d a:%d p:%d c:%d", source_1, source_1, flags[4], out, out, out_flags.o, out_flags.d, out_flags.i, out_flags.t, out_flags.s, out_flags.z, out_flags.a, out_flags.p, out_flags.c);
+    end
+    endtask;
+
+    //
+    // Task : AAS
+    //
+    task TASK_AAS(input [15:0] s1, input [15:0] flags);
+    begin
+        opcode          = `ALU_OP_AAS;
+        source_1        = s1;
+        source_2        = 0;
+        source_flags    = flags;
+        select_word     = 1'b0;
+        #(`TB_CYCLE * 2);
+        $display("%d(%x) a:%d -(AAS)-> %d(%x) o:%d d:%d i:%d t:%d s:%d z:%d a:%d p:%d c:%d", source_1, source_1, flags[4], out, out, out_flags.o, out_flags.d, out_flags.i, out_flags.t, out_flags.s, out_flags.z, out_flags.a, out_flags.p, out_flags.c);
+    end
+    endtask;
+
+    //
     // Test pattern
     //
     initial begin
@@ -705,6 +795,61 @@ module KFX86_Accumulator_tm();
         TASK_SAR(16'h0003, 16'h0000, 1'b0);
         TASK_SAR(16'h0001, 16'h0000, 1'b0);
         TASK_SAR(16'h0000, 16'h0000, 1'b0);
+
+        $display("***** NOT ***** at %d", tb_cycle_counter);
+        TASK_NOT(16'h0000, 16'h0000, 1'b1);
+        TASK_NOT(16'h0000, 16'hFFFF, 1'b1);
+        TASK_NOT(16'hFFFF, 16'h0000, 1'b1);
+        TASK_NOT(16'hAAAA, 16'h0000, 1'b1);
+        TASK_NOT(16'h5555, 16'h0000, 1'b1);
+        TASK_NOT(16'h0000, 16'h0000, 1'b0);
+        TASK_NOT(16'h00FF, 16'h0000, 1'b0);
+        TASK_NOT(16'h00AA, 16'h0000, 1'b0);
+        TASK_NOT(16'h0055, 16'h0000, 1'b0);
+
+        $display("***** NEG ***** at %d", tb_cycle_counter);
+        TASK_NEG(16'h0000, 16'h0000, 1'b1);
+        TASK_NEG(16'h0000, 16'hFFFF, 1'b1);
+        TASK_NEG(16'h0000, 16'h0000, 1'b1);
+        TASK_NEG(16'hFFFF, 16'h0000, 1'b1);
+        TASK_NEG(16'hAAAA, 16'h0000, 1'b1);
+        TASK_NEG(16'h5555, 16'h0000, 1'b1);
+        TASK_NEG(16'h0000, 16'h0000, 1'b0);
+        TASK_NEG(16'h0000, 16'h0000, 1'b0);
+        TASK_NEG(16'h00FF, 16'h0000, 1'b0);
+        TASK_NEG(16'h00AA, 16'h0000, 1'b0);
+        TASK_NEG(16'h0055, 16'h0000, 1'b0);
+
+        $display("***** DAA ***** at %d", tb_cycle_counter);
+        TASK_DAA(16'h0000, 16'h0000);
+        TASK_DAA(16'h0000, 16'hFFFF);
+        TASK_DAA(16'h0000, 16'h0010);
+        TASK_DAA(16'h0000, 16'h0001);
+        TASK_DAA(16'h000A, 16'h0000);
+        TASK_DAA(16'h00A0, 16'h0000);
+
+        $display("***** DAS ***** at %d", tb_cycle_counter);
+        TASK_DAS(16'h0000, 16'h0000);
+        TASK_DAS(16'h0000, 16'hFFFF);
+        TASK_DAS(16'h0000, 16'h0010);
+        TASK_DAS(16'h0000, 16'h0001);
+        TASK_DAS(16'h000A, 16'h0000);
+        TASK_DAS(16'h00A0, 16'h0000);
+        TASK_DAS(16'h00FF, 16'h0000);
+
+        $display("***** AAA ***** at %d", tb_cycle_counter);
+        TASK_AAA(16'h0000, 16'h0000);
+        TASK_AAA(16'h0000, 16'hFFFF);
+        TASK_AAA(16'h0000, 16'h0010);
+        TASK_AAA(16'h0009, 16'h0000);
+        TASK_AAA(16'h000A, 16'h0000);
+
+        $display("***** AAS ***** at %d", tb_cycle_counter);
+        TASK_AAS(16'h0000, 16'h0000);
+        TASK_AAS(16'h0000, 16'hFFFF);
+        TASK_AAS(16'h0000, 16'h0010);
+        TASK_AAS(16'h0009, 16'h0000);
+        TASK_AAS(16'h000A, 16'h0000);
 
         #(`TB_CYCLE * 12);
         // End of simulation
